@@ -4,8 +4,8 @@ const oprtrBtn = [...document.querySelectorAll('.optr')];
 const oprators = oprtrBtn.map((btn)=>btn.innerText)
 const equal = document.querySelector('.equal');
 const dot = document.querySelector('.dot');
-const leftCursor = document.querySelector('.left');
-const rightCursor = document.querySelector('.right');
+const leftBracket = document.querySelector('.left');
+const rightBracket = document.querySelector('.right');
 const clear = document.querySelector('.clr');
 const back = document.querySelector('.back');
 const numbers = [...document.querySelectorAll('.num')];
@@ -53,5 +53,15 @@ document.querySelector('.btns__nums').addEventListener('click', (e)=> {
         mainScreen.innerText = `0${dot.innerText}`
       }
     }
+  }
+})
+
+document.querySelector('.btns__ctrl').addEventListener("click", (e)=> {
+  const target = e.target;
+  if (target === clear) {
+    mainScreen.innerText = "";
+  } else if (target === back) {
+    let lastI = mainScreen.innerText.length - 1;
+    mainScreen.innerText = mainScreen.innerText.slice(0, lastI);
   }
 })
