@@ -1,5 +1,6 @@
 // elements
 const mainScreen = document.querySelector('.screen__main');
+const resultScreen = document.querySelector('.screen__result');
 const oprtrBtn = [...document.querySelectorAll('.optr')];
 const oprators = oprtrBtn.map((btn)=>btn.innerText)
 const equal = document.querySelector('.equal');
@@ -29,13 +30,19 @@ document.querySelector(".theme-toggle").addEventListener('click', (e)=> {
 // Writer on screen
 document.querySelector('.btns__nums').addEventListener('click', (e)=> {
   const target = e.target;
+  console.log(mainScreen.scrollWidth)
 
   if (target.matches('.btn')) {
     let screenText = mainScreen.innerText;
     let lastI = screenText.length - 1;
 
     if (numbers.includes(target)) {
+      if (screenText === '0') {
+        mainScreen.innerText = target.innerText;
+        return;
+      }
       mainScreen.innerText += target.innerText;
+      mainScreen.scrollLeft = mainScreen.scrollWidth;
     } else if (oprtrBtn.includes(target)) {
 
       if (screenText.length !== 0) {
@@ -44,11 +51,13 @@ document.querySelector('.btns__nums').addEventListener('click', (e)=> {
           mainScreen.innerText = screenText;
         } else {
           mainScreen.innerText += target.innerText;
+          mainScreen.scrollLeft = mainScreen.scrollWidth;
         }
       }
     } else {
       if (target.innerText === dot.innerText && numData.includes(screenText[lastI])) {
         mainScreen.innerText += target.innerText;
+        mainScreen.scrollLeft = mainScreen.scrollWidth;
       } else if (screenText.length === 0) {
         mainScreen.innerText = `0${dot.innerText}`
       }
@@ -57,6 +66,7 @@ document.querySelector('.btns__nums').addEventListener('click', (e)=> {
 })
 
 document.querySelector('.btns__ctrl').addEventListener("click", (e)=> {
+  console.log(mainScreen.scrollWidth)
   const target = e.target;
   if (target === clear) {
     mainScreen.innerText = "";

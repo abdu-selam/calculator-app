@@ -20,9 +20,14 @@
   --screen-dark: hsla(176,100%,50%,0.1);
   --ctrl-dark: hsl(0,100%,13%);
   --ctrl-txt-dark: hsla(175.1,100%,76.1%,0.923);
-  --btn-dark: linear-gradient(45deg,hsl(242.9,100%,12.4%),hsl(229.4,82.7%,36.3%));
+  --btn-dark: linear-gradient(
+  45deg,
+  hsl(242.9,100%,12.4%),
+  hsl(229.4,82.7%,36.3%));
+  --btn-click-dark: linear-gradient(135deg,#0272AE,#2BFFDD);
   --text-dark: hsl(176.2,100%,50.2%);
   --dark-shadow: 0px 0px 10px hsla(176.2,100%,50.2%,0.5);
+
 
   /* light theme */
   --body-light: hsl(176,100%,50%);
@@ -30,9 +35,17 @@
   --screen-light: hsla(242.5,100%,4.7%,0.1);
   --ctrl-light: hsl(0,56%,67%);
   --ctrl-txt-light: hsla(175.1,100%,15%,0.923);
-  --btn-light: linear-gradient(45deg,#0272AE,#2BFFDD);
+  --btn-light: linear-gradient(
+  45deg,
+  hsl(200.9,97.7%,34.5%),
+  hsl(170.4,100%,58.4%));
+  --btn-click-light: linear-gradient(
+  1355deg,
+  hsl(242.9,100%,12.4%),
+  hsl(229.4,82.7%,36.3%));
   --text-light: hsl(242.5,100%,4.7%);
   --light-shadow: 0px 0px 10px hsla(242.5,100%,4.7%,0.5);
+
 }
 
 @media (min-aspect-ratio:43/64) {
@@ -63,28 +76,69 @@ body {
   background: var(--btn-dark);
   color: var(--text-dark);
   box-shadow: var(--light-shadow);
-  transition-delay: .5s;
+  position: absolute;
+  top: 48%;
+  transform: translateY(calc(var(--heght)*-0.5));
+  z-index: 2;
 }
 
-[data-theme="light"] .theme-toggle {
-  border: var(--light-border);
-  background: var(--btn-light);
+[data-theme='light'] .theme-toggle {
   color: var(--text-light);
+  border: var(--light-border);
   box-shadow: var(--dark-shadow);
+  background: var(--btn-light);
 }
 
 .container {
   width: var(--width);
   height: var(--heght);
   background: var(--body-dark);
-  border-radius: 20px;
+  border-radius: 8.5% / 5%;
   border: var(--dark-border);
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   box-shadow: var(--dark-shadow);
+  position: relative;
 }
+
+@property --angle {
+  syntax:"<angle>";
+  inherits:false;
+  initial-value:0deg;
+}
+
+.container::before,
+.container::after {
+  --clr1: hsl(242.9,100%,12.4%);
+  --clr2: hsl(182.5,100%,66.7%);
+  content: '';
+  width: 100%;
+  height: 100%;
+  padding: 1%;
+  position: absolute;
+  border-radius: inherit;
+  background: conic-gradient(
+  from var(--angle),
+  var(--clr1),
+  var(--clr2),
+  var(--clr2),
+  var(--clr1));
+  z-index: -1;
+  animation: loop 4s linear infinite;
+}
+
+.container::after {
+  filter: blur(10px);
+}
+
+@keyframes loop {
+  to {
+    --angle: 360deg;
+  }
+}
+
 
 [data-theme="light"] .container {
   background: var(--body-light);
@@ -92,13 +146,19 @@ body {
   box-shadow: var(--light-shadow);
 }
 
+[data-theme="light"] is(.container::before,.container::after) {
+  --clr1: hsl(200.9,97.7%,34.5%);
+  --clr2: hsl(170.4,100%,58.4%);
+}
+
 /* SCREEN STYLES */
 
 .screen {
   width: 97%;
   height: 24%;
+  padding: 0 2%;
   background: var(--screen-dark);
-  border-radius: 20px 20px 0 0;
+  border-radius: 10% 10% 0 0 / 20% 20% 0 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -109,14 +169,16 @@ body {
 }
 
 .screen__main , .screen__result {
-  width: 100%;
+  width: inner-text;
   height: 50%;
-  padding-inline: 10px;
+  padding: 5% 0;
   font-size: 1.5rem;
   color: var(--text-dark);
-  display: grid;
-  place-items: center right;
+  display: flow-roots;
+  white-space: nowrap;
+  text-align: right;
   transition: 0.5s;
+  overflow: auto;
 }
 
 [data-theme="light"] :is(.screen__main,.screen__result) {
@@ -135,7 +197,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-radius: 5px;
+  border-radius: 4%/3%;
   overflow: hidden;
 }
 
@@ -164,7 +226,9 @@ body {
   border-right: 1px solid black;
   border-left: 1px solid black;
   border-collapse: collapse;
-  transition-delay: .5s;
+  position: relative;
+  overflow: hidden;
+  animation: '.5s';
 }
 
 [data-theme="light"] :is(.left,.right) {
@@ -186,14 +250,15 @@ body {
   width: 90%;
   height: 90%;
   place-self: center;
-  border-radius: 10px;
+  border-radius: 18%/14%;
   display: grid;
   place-content: center;
   font-size: 2.2rem;
   background: var(--btn-dark);
   color: var(--text-dark);
   box-shadow: var(--dark-shadow);
-  transition-delay: 0.5s;
+  position: relative;
+  overflow: hidden;
 }
 
 [data-theme="light"] .btn {
