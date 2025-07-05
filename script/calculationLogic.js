@@ -1,5 +1,5 @@
 const formatter = (text)=> {
-	const txtArray = text.split('');
+	const txtArray = [...text];
 	let [open,
 		close] = [0,
 		0]
@@ -37,9 +37,7 @@ const formatter = (text)=> {
 		txtArray.splice(index+4, 0, ')');
 	}
 
-	text = '('.repeat(close) + txtArray.join('') + ')'.repeat(open);
-
-	return text;
+	return '('.repeat(close) + txtArray.join('') + ')'.repeat(open);
 }
 
 
@@ -110,10 +108,40 @@ const postfixer = (infix)=> {
 			stack.reverse().forEach((each)=> {
 				output.push(each);
 			})
-
-			delete stack;
-			delete bracketStack;
 		}
 	}
 	return output;
+}
+
+const calcLogic = (num1, num2, oprtr)=> {
+	if (oprtr === '+')
+		return num1 + num2;
+	else if (oprtr === '-')
+		return num1 - num2;
+	else if (oprtr === '×')
+		return num1 * num2;
+	else if (oprtr === '÷')
+		return num1 / num2;
+}
+
+
+const postfixCalculator = (list) => {
+	if (list.length === 1)
+		return list[0];
+	for (let i = 0; i < list.length; i++) {
+		if (typeof(list[i]) === 'number') continue;
+		let value = calcLogic(list[i-2], list[i-1], list[i]);
+		list.splice(i-2, 3, value);
+		return postfixCalculator(list);
+	}
+}
+
+
+export const calculator = (text)=> {
+	const formattedText = formatter(text);
+	const separatedArray = separator(formattedText);
+	const postfixNotation = postfixer(separatedArray);
+	const value = postfixCalculator(postfixNotation);
+
+	return value;
 }

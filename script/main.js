@@ -1,3 +1,7 @@
+import {
+	calculator
+} from './calculationLogic.js';
+
 // elements
 const mainScreen = document.querySelector('.screen__main'); // screen that show clicked numbers
 const resultScreen = document.querySelector('.screen__result'); // screen that shows calculation result
@@ -71,7 +75,8 @@ document.querySelector('.btns__nums').addEventListener('click', (e)=> {
 				// for empty screen add 0 before point
 			mainScreen.innerText = `0${dot.innerText}0`;
 		} else if (target === equal) {
-			//
+			let value = calculator(screenText);
+			resultScreen.innerText = value;
 		}
 	}
 	// prevent the text from sticking on the left corner
@@ -86,6 +91,7 @@ document.querySelector('.btns__ctrl').addEventListener("click",
 		let lastIndex = screenText.length - 1;
 		if (target === clear) {
 			mainScreen.innerText = "";
+			resultScreen.innerText = "";
 		} else if (target === back) {
 			mainScreen.innerText = screenText.slice(0, lastIndex);
 		} else {
@@ -95,6 +101,8 @@ document.querySelector('.btns__ctrl').addEventListener("click",
 					mainScreen.innerText = screenText.slice(0, lastIndex) + target.innerText;
 				else if (screenText[lastIndex] === '(')
 					mainScreen.innerText = screenText.slice(0, lastIndex);
+				else
+					mainScreen.innerText += target.innerText;
 				return;
 			}
 			mainScreen.innerText += target.innerText;
