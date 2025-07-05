@@ -1,25 +1,25 @@
-import {
-	tryer
-} from './calculationLogic.js';
-
 // elements
-const mainScreen = document.querySelector('.screen__main');
-const resultScreen = document.querySelector('.screen__result');
-const oprtrBtn = [...document.querySelectorAll('.optr')];
-const oprators = oprtrBtn.map((btn)=>btn.innerText)
+const mainScreen = document.querySelector('.screen__main'); // screen that show clicked numbers
+const resultScreen = document.querySelector('.screen__result'); // screen that shows calculation result
+// single buttons
 const equal = document.querySelector('.equal');
 const dot = document.querySelector('.dot');
 const leftBracket = document.querySelector('.left');
 const rightBracket = document.querySelector('.right');
 const clear = document.querySelector('.clr');
 const back = document.querySelector('.back');
-const numbers = [...document.querySelectorAll('.num')];
-const numData = numbers.map((num)=>num.innerText)
+
+// array of buttons
+const oprtrBtn = [...document.querySelectorAll('.optr')]; // array of operators element
+const oprators = oprtrBtn.map((btn)=>btn.innerText);
+
+const numbers = [...document.querySelectorAll('.num')]; // array of number elements
+const numData = numbers.map((num)=>num.innerText);
 
 
 // Theme toggler
 document.querySelector(".theme-toggle").addEventListener('click', (e)=> {
-	const body = document.querySelector("body");
+	const body = document.body;
 	let theme = body.getAttribute('data-theme')
 
 	if (theme === "dark") {
@@ -35,49 +35,68 @@ document.querySelector(".theme-toggle").addEventListener('click', (e)=> {
 document.querySelector('.btns__nums').addEventListener('click', (e)=> {
 	const target = e.target;
 
-	if (target.matches('.btn')) {
-		let screenText = mainScreen.innerText;
-		let lastI = screenText.length - 1;
+	if (!target.matches('.btn')) return;
+	let screenText = mainScreen.innerText;
+	let lastIndex = screenText.length - 1;
 
-		if (numbers.includes(target)) {
-			if (screenText === '0') {
-				mainScreen.innerText = target.innerText;
+	if (numbers.includes(target)) {
+		if (screenText === '0') {
+			// if '0' on the screen replace with clucked number
+			mainScreen.innerText = target.innerText;
+			return;
+		}
+		mainScreen.innerText += target.innerText;
+	} else if (oprtrBtn.includes(target)) {
+
+		// prevent writing operators on clear screen
+		if (screenText.length === 0) {
+			if (target.innerText !== '-') return;
+			mainScreen.innerText = target.innerText;
+			return
+		}
+
+		if (oprators.includes(screenText[lastIndex]) || screenText[lastIndex] === dot.innerText) {
+			// prevent typing preceded operators and point
+			if (screenText.length > 1) {
+				screenText = screenText.slice(0, lastIndex) + target.innerText;
+				mainScreen.innerText = screenText;
+			}
+		} else
+			mainScreen.innerText += target.innerText;
+	} else {
+		if (target === dot) {
+			if (numData.includes(screenText[lastIndex]))
+				mainScreen.innerText += target.innerText;
+			else if (screenText.length === 0)
+				// for empty screen add 0 before point
+			mainScreen.innerText = `0${dot.innerText}0`;
+		} else if (target === equal) {
+			//
+		}
+	}
+	// prevent the text from sticking on the left corner
+	mainScreen.scrollLeft = mainScreen.scrollWidth;
+})
+
+// handling clear button and back button
+document.querySelector('.btns__ctrl').addEventListener("click",
+	(e)=> {
+		const target = e.target;
+		let screenText = mainScreen.innerText;
+		let lastIndex = screenText.length - 1;
+		if (target === clear) {
+			mainScreen.innerText = "";
+		} else if (target === back) {
+			mainScreen.innerText = screenText.slice(0, lastIndex);
+		} else {
+			// writing on screen brackets
+			if (target.innerText === ')') {
+				if (oprators.includes(screenText[lastIndex]))
+					mainScreen.innerText = screenText.slice(0, lastIndex) + target.innerText;
+				else if (screenText[lastIndex] === '(')
+					mainScreen.innerText = screenText.slice(0, lastIndex);
 				return;
 			}
 			mainScreen.innerText += target.innerText;
-			mainScreen.scrollLeft = mainScreen.scrollWidth;
-		} else if (oprtrBtn.includes(target)) {
-
-			if (screenText.length !== 0) {
-				if (oprators.includes(screenText[lastI]) || screenText[lastI] === dot.innerText) {
-					screenText = screenText.slice(0, lastI) + target.innerText;
-					mainScreen.innerText = screenText;
-				} else {
-					mainScreen.innerText += target.innerText;
-					mainScreen.scrollLeft = mainScreen.scrollWidth;
-				}
-			}
-		} else {
-			if (target === dot && numData.includes(screenText[lastI])) {
-				mainScreen.innerText += target.innerText;
-				mainScreen.scrollLeft = mainScreen.scrollWidth;
-			} else if (screenText.length === 0) {
-				mainScreen.innerText = `0${dot.innerText}`;
-			} else if (target === equal) {
-				tryer(screenText);
-			}
 		}
-	}
-})
-
-document.querySelector('.btns__ctrl').addEventListener("click", (e)=> {
-	const target = e.target;
-	if (target === clear) {
-		mainScreen.innerText = "";
-	} else if (target === back) {
-		let lastI = mainScreen.innerText.length - 1;
-		mainScreen.innerText = mainScreen.innerText.slice(0, lastI);
-	} else {
-		mainScreen.innerText += target.innerText;
-	}
-})
+	})
