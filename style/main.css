@@ -4,20 +4,25 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: Arial Sans-Serif;
-	transition: color .5s, background .5s;
+	transition: color .5s, background-color .5s;
+}
+
+button {
+	border: none;
 }
 
 /* UTILITY CLASSES */
 :root {
 	/* sizes */
 	--width: 80vw;
-	--heght: calc(var(--width) * 1.7);
+	--height: calc(var(--width) * 1.7);
 
 	/* colors */
 	/* datk theme */
 	--body-dark: hsl(242.5,100%,4.7%);
 	--dark-border: 1px solid hsl(176.2,100%,50.2%);
 	--screen-dark: hsla(176,100%,50%,0.1);
+	--screen-cover-dark: hsl(0,0%,100%);
 	--ctrl-dark: hsl(0,100%,13%);
 	--ctrl-txt-dark: hsla(175.1,100%,76.1%,0.923);
 	--btn-dark: linear-gradient(
@@ -33,6 +38,7 @@
 	--body-light: hsl(176,100%,50%);
 	--light-border: 1px solid hsl(242.5,100%,4.7%);
 	--screen-light: hsla(242.5,100%,4.7%,0.1);
+	--screen-cover-light: hsl(0,0%,0%);
 	--ctrl-light: hsl(0,56%,67%);
 	--ctrl-txt-light: hsla(175.1,100%,15%,0.923);
 	--btn-light: linear-gradient(
@@ -50,8 +56,8 @@
 
 @media (min-aspect-ratio:43/64) {
 :root {
-	--heght: 90vh;
-	--width: calc(var(--heght) / 1.7)
+	--height: 90vh;
+	--width: calc(var(--height) / 1.7)
 }
 }
 /* CONTAINER STYLE */
@@ -60,6 +66,7 @@ body {
 	display: grid;
 	place-items: center;
 	background: var(--body-dark);
+	position: relative;
 }
 
 [data-theme="light"] {
@@ -78,7 +85,7 @@ body {
 	box-shadow: var(--light-shadow);
 	position: absolute;
 	top: 48%;
-	transform: translateY(calc(var(--heght)*-0.5));
+	transform: translateY(calc(var(--height)*-0.5));
 	z-index: 2;
 }
 
@@ -91,7 +98,7 @@ body {
 
 .container {
 	width: var(--width);
-	height: var(--heght);
+	height: var(--height);
 	background: var(--body-dark);
 	border-radius: 8.5% / 5%;
 	border: var(--dark-border);
@@ -103,14 +110,28 @@ body {
 	position: relative;
 }
 
+.back-animation {
+	width: var(--width);
+	height: var(--height);
+	border-radius: 8.5% / 5%;
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 50vh;
+	left: 50vw;
+	transform: translate(-50%,-50%);
+}
+
 @property --angle {
 	syntax:"<angle>";
 	inherits:false;
 	initial-value:0deg;
 }
 
-.container::before,
-.container::after {
+/* BACKGROUND ANIMATION */
+.back-animation::before,
+.back-animation::after {
 	--clr1: hsl(242.9,100%,12.4%);
 	--clr2: hsl(182.5,100%,66.7%);
 	content: '';
@@ -131,7 +152,7 @@ body {
 	animation: loop 5s linear infinite;
 }
 
-.container::after {
+.back-animation::after {
 	filter: blur(15px);
 }
 
@@ -148,7 +169,7 @@ body {
 	box-shadow: var(--light-shadow);
 }
 
-[data-theme="light"] is(.container::before,.container::after) {
+[data-theme="light"] :is(.back-animation::before,.back-animation::after) {
 	--clr1: hsl(200.9,97.7%,34.5%);
 	--clr2: hsl(170.4,100%,58.4%);
 }
@@ -164,10 +185,47 @@ body {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	position: relative;
 }
 
 [data-theme="light"] .screen {
 	background: var(--screen-light);
+}
+
+
+.screen__cover {
+	width: 100%;
+	height: 100%;
+	background: var(--screen-cover-dark);
+	position: absolute;
+	transform: scale(0);
+	transform-origin: right top;
+	inset: 0;
+	z-index: 5;
+	clip-path: circle(50% at right top);
+	-webkit-clip-path: circle(50% at right top);
+}
+
+[data-theme="light"] .screen__cover {
+	background: var(--screen-cover-light);
+}
+
+.clearer {
+	animation: cover .7s linear;
+}
+
+@keyframes cover {
+	0 {
+		opacity: 100%;
+	}
+	70% {
+		opacity: 70%;
+		transform: scale(5);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(5);
+	}
 }
 
 .screen__main , .screen__result {
@@ -181,6 +239,7 @@ body {
 	text-align: right;
 	transition: 0.5s;
 	overflow: auto;
+	scrollbar-width: thin;
 }
 
 [data-theme="light"] :is(.screen__main,.screen__result) {
@@ -215,6 +274,7 @@ body {
 	background: var(--ctrl-dark);
 	text-align: center;
 	color: var(--ctrl-txt-dark);
+	transition: transform .2s;
 }
 
 [data-theme="light"] .ctrl {
@@ -230,7 +290,6 @@ body {
 	border-collapse: collapse;
 	position: relative;
 	overflow: hidden;
-	animation: '.5s';
 }
 
 [data-theme="light"] :is(.left,.right) {
@@ -238,6 +297,8 @@ body {
 	color: var(--text-light);
 }
 
+
+/* NUMBERS AND OPERATORS BUTTON STYLES */
 .btns__nums {
 	width: 100%;
 	padding-top: 1%;
@@ -258,13 +319,18 @@ body {
 	font-size: 2.2rem;
 	background: var(--btn-dark);
 	color: var(--text-dark);
-	box-shadow: var(--dark-shadow);
 	position: relative;
 	overflow: hidden;
+	transition: transform .2s;
 }
 
 [data-theme="light"] .btn {
 	background: var(--btn-light);
 	color: var(--text-light);
 	box-shadow: var(--light-shadow);
+}
+
+.btn:active, .ctrl:active {
+	transform: scale(0.95);
+	opacity: 0.8;
 }

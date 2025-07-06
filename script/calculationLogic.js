@@ -1,11 +1,27 @@
-const formatter = (text)=> {
-	const txtArray = [...text];
+// function to format inappropriate input like unclosed bracket
+const inputFormatter = (text)=> {
+	const txtArray = [...text]; // using array of characters for better control
 	let [open,
 		close] = [0,
 		0]
 	const [mult,
-		minus] = [[],
+		minus,
+		dblOprtr] = [[],
+		[],
 		[]];
+
+	// handling negative sign when it comes with multiplication and division
+	for (let i = 0; i < txtArray.length; i++) {
+		if (txtArray[i] === '-' && ['×', '÷'].includes(txtArray[i-1]))
+			dblOprtr.push(i+(dblOprtr.length*2));
+	}
+	dblOprtr.forEach(index => {
+		txtArray.splice(index, 0, '(');
+		txtArray.splice(index+3, 0, ')');
+	})
+
+	/* handling unclosed and unopened brackets and also
+	negative sign when it comes first and after opening bracket */
 	let i = -1;
 	for (let char of txtArray) {
 		i++;
@@ -26,7 +42,9 @@ const formatter = (text)=> {
 		}
 	}
 
+	// adding multiplication sign on '6(7)' like expression
 	mult.forEach(index => txtArray.splice(index, 0, '×'));
+
 	minus.forEach(index => txtArray.splice(index, 0, 0));
 
 	i = 0;
@@ -41,6 +59,7 @@ const formatter = (text)=> {
 }
 
 
+// separator function to separate numbers and signs from the given string
 const separator = (text)=> {
 	const operators = ['+',
 		'-',
@@ -69,6 +88,7 @@ const separator = (text)=> {
 }
 
 
+// RPN generator from given infix notation
 const postfixer = (infix)=> {
 	const presedence = new Map([['+', 1], ['-', 1], ['×', 2], ['÷', 2], ['(', 0]]);
 	const [output,
@@ -113,6 +133,8 @@ const postfixer = (infix)=> {
 	return output;
 }
 
+
+// calculator of two numbers
 const calcLogic = (num1, num2, oprtr)=> {
 	if (oprtr === '+')
 		return num1 + num2;
@@ -120,28 +142,34 @@ const calcLogic = (num1, num2, oprtr)=> {
 		return num1 - num2;
 	else if (oprtr === '×')
 		return num1 * num2;
-	else if (oprtr === '÷')
+	else if (oprtr === '÷') {
+		if (num2 === 0)
+			throw Error("Zero division error");
 		return num1 / num2;
-}
-
-
-const postfixCalculator = (list) => {
-	if (list.length === 1)
-		return list[0];
-	for (let i = 0; i < list.length; i++) {
-		if (typeof(list[i]) === 'number') continue;
-		let value = calcLogic(list[i-2], list[i-1], list[i]);
-		list.splice(i-2, 3, value);
-		return postfixCalculator(list);
 	}
 }
 
 
+// calculator for RPN expressions
+const postfixCalculator = (list) => {
+	const stack = [];
+	for (const elem of list) {
+		if (typeof elem === 'number') stack.push(elem);
+		else {
+			const num2 = stack.pop();
+			const num1 = stack.pop();
+			stack.push(calcLogic(num1, num2, elem));
+		}
+	}
+	return stack[0];
+};
+
+// caller function for real time calculation
 export const calculator = (text)=> {
-	const formattedText = formatter(text);
+	const formattedText = inputFormatter(text);
 	const separatedArray = separator(formattedText);
 	const postfixNotation = postfixer(separatedArray);
 	const value = postfixCalculator(postfixNotation);
 
-	return value;
+	return isNaN(value)?undefined: value;
 }

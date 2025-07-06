@@ -40,6 +40,8 @@ document.querySelector('.btns__nums').addEventListener('click', (e)=> {
 	const target = e.target;
 
 	if (!target.matches('.btn')) return;
+	if (mainScreen.innerText === "Error")
+		mainScreen.innerText = "";
 	let screenText = mainScreen.innerText;
 	let lastIndex = screenText.length - 1;
 
@@ -50,6 +52,14 @@ document.querySelector('.btns__nums').addEventListener('click', (e)=> {
 			return;
 		}
 		mainScreen.innerText += target.innerText;
+		try {
+			let result = calculator(mainScreen.innerText);
+			resultScreen.innerText = result !== undefined?result: "";
+		}catch(err) {
+			mainScreen.innerText = "";
+			resultScreen.innerText = "Error";
+		}
+
 	} else if (oprtrBtn.includes(target)) {
 
 		// prevent writing operators on clear screen
@@ -59,24 +69,49 @@ document.querySelector('.btns__nums').addEventListener('click', (e)=> {
 			return
 		}
 
-		if (oprators.includes(screenText[lastIndex]) || screenText[lastIndex] === dot.innerText) {
+		if (oprators.includes(screenText[lastIndex]) || screenText[lastIndex] ===
+			dot.innerText) {
 			// prevent typing preceded operators and point
 			if (screenText.length > 1) {
-				screenText = screenText.slice(0, lastIndex) + target.innerText;
-				mainScreen.innerText = screenText;
+				// allow negative sign after multiplication and division
+				if (target.innerText === '-' && ['×', '÷'].includes(screenText[lastIndex]))
+					mainScreen.innerText += target.innerText;
+
+				else {
+					if (oprators.includes(screenText[lastIndex-1]))
+						screenText = screenText.slice(0, lastIndex-1) + target.innerText;
+					else
+						screenText = screenText.slice(0, lastIndex) + target.innerText;
+					mainScreen.innerText = screenText;
+				}
 			}
+		} else if (screenText[lastIndex] === '(') {
+			if (target.innerText !== '-' && screenText.length > 1) {
+				mainScreen.innerText = screenText.slice(0, lastIndex) + target.innerText;
+			} else if (target.innerText == '-')
+				mainScreen.innerText += target.innerText;
 		} else
 			mainScreen.innerText += target.innerText;
 	} else {
 		if (target === dot) {
-			if (numData.includes(screenText[lastIndex]))
-				mainScreen.innerText += target.innerText;
-			else if (screenText.length === 0)
+			if (numData.includes(screenText[lastIndex])) {
+				const parts = screenText.split(/[\-\+\÷\×]/);
+				const lastNum = parts[parts.length-1];
+				if (!lastNum.includes('.'))
+					mainScreen.innerText += target.innerText;
+			} else if (screenText.length === 0)
 				// for empty screen add 0 before point
 			mainScreen.innerText = `0${dot.innerText}0`;
 		} else if (target === equal) {
-			let value = calculator(screenText);
-			resultScreen.innerText = value;
+			let value;
+			try {
+				value = calculator(screenText);
+			}
+			catch (err) {
+				value = "Error";
+			}
+			mainScreen.innerText = value === undefined?"": value;
+			resultScreen.innerText = '';
 		}
 	}
 	// prevent the text from sticking on the left corner
@@ -90,21 +125,39 @@ document.querySelector('.btns__ctrl').addEventListener("click",
 		let screenText = mainScreen.innerText;
 		let lastIndex = screenText.length - 1;
 		if (target === clear) {
-			mainScreen.innerText = "";
-			resultScreen.innerText = "";
+			let cover = document.querySelector('.screen__cover');
+			cover.classList.add('clearer');
+			setTimeout(()=> cover.classList.remove('clearer'), 700)
+			setTimeout(()=> {
+				mainScreen.innerText = "";
+				resultScreen.innerText = "";
+			}, 100)
 		} else if (target === back) {
-			mainScreen.innerText = screenText.slice(0, lastIndex);
+			if (screenText !== "") {
+				mainScreen.innerText = screenText.length == 1?
+				"": screenText.slice(0, lastIndex);
+				let result = calculator(mainScreen.innerText);
+				resultScreen.innerText = result !== undefined? result: "";
+			}
 		} else {
 			// writing on screen brackets
 			if (target.innerText === ')') {
-				if (oprators.includes(screenText[lastIndex]))
-					mainScreen.innerText = screenText.slice(0, lastIndex) + target.innerText;
-				else if (screenText[lastIndex] === '(')
+				if (oprators.includes(screenText[lastIndex])) {
+					if (screenText.length !== 1)
+						mainScreen.innerText = screenText.slice(0, lastIndex) + target.innerText;
+				} else if (screenText[lastIndex] === '(')
 					mainScreen.innerText = screenText.slice(0, lastIndex);
-				else
+				else if (screenText === "Error")
+					mainScreen.innerText = "";
+				else if (screenText[lastIndex] === '.')
+					mainScreen.innerText += `0${target.innerText}`;
+				else if (screenText.length !== 0)
 					mainScreen.innerText += target.innerText;
 				return;
 			}
-			mainScreen.innerText += target.innerText;
+			if (screenText[lastIndex] === ".")
+				mainScreen.innerText += `0${target.innerText}`;
+			else
+				mainScreen.innerText += target.innerText;
 		}
 	})

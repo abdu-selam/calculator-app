@@ -8,7 +8,7 @@
 	<meta name="author" content="Abduselam Awel">
 	<meta name="description" content="Simple calculator app">
 
-	<link rel="shortcut icon" type="image/x-icon" href="./images/favicon.png">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.png">
 	<link rel="stylesheet" href="./style/main.css">
 
 	<title>Calculator</title>
@@ -17,83 +17,85 @@
 </head>
 <body data-theme="dark">
 
-	<button class="theme-toggle"> Dark </button>
+	<button class="theme-toggle"> Light </button>
+	<div class="back-animation"></div>
 
-	<section class="container">
+	<div class="container">
 
-		<section class="screen">
+		<div class="screen">
 			<!-- number writing screen -->
 			<div class="screen__main"></div>
 			<!-- number result shower screen -->
 			<div class="screen__result"></div>
-		</section>
-		<section class="btns">
+			<div class="screen__cover"></div>
+		</div>
+		<div class="btns">
 			<div class="btns__ctrl">
-				<div class="ctrl clr">
+				<button class="ctrl clr">
 					clear
-				</div>
-				<div class="ctrl left">
+				</button>
+				<button class="ctrl left">
 					(
-				</div>
-				<div class="ctrl right">
+				</button>
+				<button class="ctrl right">
 					)
-				</div>
-				<div class="ctrl back">
+				</button>
+				<button class="ctrl back">
 					del
-				</div>
-</div>
-<!-- number and operator buttons -->
-			<div class="btns__nums">
-				<div class="btn num">
-					1
-				</div>
-				<div class="btn num">
-					2
-				</div>
-				<div class="btn num">
-					3
-				</div>
-				<div class="btn optr">
-					+
-				</div>
-				<div class="btn num">
-					4
-				</div>
-				<div class="btn num">
-					5
-				</div>
-				<div class="btn num">
-					6
-				</div>
-				<div class="btn optr">
-					-
-				</div>
-				<div class="btn num">
-					7
-				</div>
-				<div class="btn num">
-					8
-				</div>
-				<div class="btn num">
-					9
-				</div>
-				<div class="btn optr">
-					×
-				</div>
-				<div class="btn dot">
-					.
-				</div>
-				<div class="btn num">
-					0
-				</div>
-				<div class="btn equal">
-					=
-				</div>
-				<div class="btn optr">
-					÷
-				</div>
+				</button>
 			</div>
-		</section>
-	</section>
+			<!-- number and operator buttons -->
+			<div class="btns__nums">
+				<button class="btn num" type="button" aria-label="Number 1">
+					1
+				</button>
+				<button class="btn num" type="button" aria-label="Number 2">
+					2
+				</button>
+				<button class="btn num" type="button" aria-label="Number 3">
+					3
+				</button>
+				<button class="btn optr" type="button" aria-label="plus sign">
+					+
+				</button>
+				<button class="btn num" type="button" aria-label="Number 4">
+					4
+				</button>
+				<button class="btn num" type="button" aria-label="Number 5">
+					5
+				</button>
+				<button class="btn num" type="button" aria-label="Number 6">
+					6
+				</button>
+				<button class="btn optr" type="button" aria-label="minus sign">
+					-
+				</button>
+				<button class="btn num" type="button" aria-label="Number 7">
+					7
+				</button>
+				<button class="btn num" type="button" aria-label="Number 8">
+					8
+				</button>
+				<button class="btn num" type="button" aria-label="Number 9">
+					9
+				</button>
+				<button class="btn optr" type="button" aria-label="multiplication sign">
+					×
+				</button>
+				<button class="btn dot" type="button" aria-label="point">
+					.
+				</button>
+				<button class="btn num" type="button" aria-label="Number 0">
+					0
+				</button>
+				<button class="btn equal" type="button" aria-label="equal sign">
+					=
+				</button>
+				<button class="btn optr" type="button" aria-label="division sign">
+					÷
+				</button>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
