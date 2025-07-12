@@ -1,336 +1,357 @@
 /* RESETS */
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: Arial Sans-Serif;
-	transition: color .5s, background-color .5s;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial Sans-Serif;
+  transition: color .5s, background-color .5s;
 }
 
 button {
-	border: none;
+  border: none;
+}
+
+input:focus {
+  border: none;
+  outline: none;
 }
 
 /* UTILITY CLASSES */
 :root {
-	/* sizes */
-	--width: 80vw;
-	--height: calc(var(--width) * 1.7);
+  /* sizes */
+  --width: 85vw;
+  --height: calc(var(--width) * 1.7);
 
-	/* colors */
-	/* datk theme */
-	--body-dark: hsl(242.5,100%,4.7%);
-	--dark-border: 1px solid hsl(176.2,100%,50.2%);
-	--screen-dark: hsla(176,100%,50%,0.1);
-	--screen-cover-dark: hsl(0,0%,100%);
-	--ctrl-dark: hsl(0,100%,13%);
-	--ctrl-txt-dark: hsla(175.1,100%,76.1%,0.923);
-	--btn-dark: linear-gradient(
-	45deg,
-	hsl(242.9,100%,12.4%),
-	hsl(229.4,82.7%,36.3%));
-	--btn-click-dark: linear-gradient(135deg,#0272AE,#2BFFDD);
-	--text-dark: hsl(176.2,100%,50.2%);
-	--dark-shadow: 0px 0px 10px hsla(176.2,100%,50.2%,0.5);
+  /* colors */
+  /* datk theme */
+  --body-dark: hsl(242.5,100%,4.7%);
+  --dark-border: 1px solid hsl(176.2,100%,50.2%);
+  --screen-dark: hsla(176,100%,50%,0.1);
+  --screen-cover-dark: hsl(0,0%,100%);
+  --ctrl-dark: hsl(0,100%,13%);
+  --ctrl-txt-dark: hsla(175.1,100%,76.1%,0.923);
+  --btn-dark: linear-gradient(
+  45deg,
+  hsl(242.9,100%,12.4%),
+  hsl(229.4,82.7%,36.3%));
+  --btn-click-dark: linear-gradient(135deg,#0272AE,#2BFFDD);
+  --text-dark: hsl(176.2,100%,50.2%);
+  --dark-shadow: 0px 0px 10px hsla(176.2,100%,50.2%,0.5);
 
 
-	/* light theme */
-	--body-light: hsl(176,100%,50%);
-	--light-border: 1px solid hsl(242.5,100%,4.7%);
-	--screen-light: hsla(242.5,100%,4.7%,0.1);
-	--screen-cover-light: hsl(0,0%,0%);
-	--ctrl-light: hsl(0,56%,67%);
-	--ctrl-txt-light: hsla(175.1,100%,15%,0.923);
-	--btn-light: linear-gradient(
-	45deg,
-	hsl(200.9,97.7%,34.5%),
-	hsl(170.4,100%,58.4%));
-	--btn-click-light: linear-gradient(
-	1355deg,
-	hsl(242.9,100%,12.4%),
-	hsl(229.4,82.7%,36.3%));
-	--text-light: hsl(242.5,100%,4.7%);
-	--light-shadow: 0px 0px 10px hsla(242.5,100%,4.7%,0.5);
+  /* light theme */
+  --body-light: hsl(176,100%,50%);
+  --light-border: 1px solid hsl(242.5,100%,4.7%);
+  --screen-light: hsla(242.5,100%,4.7%,0.1);
+  --screen-cover-light: hsl(0,0%,0%);
+  --ctrl-light: hsl(0,56%,67%);
+  --ctrl-txt-light: hsla(175.1,100%,15%,0.923);
+  --btn-light: linear-gradient(
+  45deg,
+  hsl(200.9,97.7%,34.5%),
+  hsl(170.4,100%,58.4%));
+  --btn-click-light: linear-gradient(
+  1355deg,
+  hsl(242.9,100%,12.4%),
+  hsl(229.4,82.7%,36.3%));
+  --text-light: hsl(242.5,100%,4.7%);
+  --light-shadow: 0px 0px 10px hsla(242.5,100%,4.7%,0.5);
 
 }
 
 @media (min-aspect-ratio:43/64) {
 :root {
-	--height: 90vh;
-	--width: calc(var(--height) / 1.7)
+  --height: 90vh;
+  --width: calc(var(--height) / 1.7)
 }
 }
 /* CONTAINER STYLE */
 body {
-	height: 100vh;
-	display: grid;
-	place-items: center;
-	background: var(--body-dark);
-	position: relative;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--body-dark);
+  position: relative;
 }
 
 [data-theme="light"] {
-	background: var(--body-light);
+  background: var(--body-light);
 }
 
 .theme-toggle {
-	width: calc(var(--width)/5);
-	padding: .5% 2%;
-	font-size: calc(var(--width)/16);
-	text-align: center;
-	border-radius: 10px;
-	border: var(--dark-border);
-	background: var(--btn-dark);
-	color: var(--text-dark);
-	box-shadow: var(--light-shadow);
-	position: absolute;
-	top: 48%;
-	transform: translateY(calc(var(--height)*-0.5));
-	z-index: 2;
+  width: calc(var(--width)/5);
+  padding: .5% 2%;
+  font-size: calc(var(--width)/16);
+  text-align: center;
+  border-radius: 10px;
+  border: var(--dark-border);
+  background: var(--btn-dark);
+  color: var(--text-dark);
+  box-shadow: var(--light-shadow);
+  position: absolute;
+  top: 48%;
+  transform: translateY(calc(var(--height)*-0.5));
+  z-index: 2;
 }
 
 [data-theme='light'] .theme-toggle {
-	color: var(--text-light);
-	border: var(--light-border);
-	box-shadow: var(--dark-shadow);
-	background: var(--btn-light);
+  color: var(--text-light);
+  border: var(--light-border);
+  box-shadow: var(--dark-shadow);
+  background: var(--btn-light);
 }
 
 .container {
-	width: var(--width);
-	height: var(--height);
-	background: var(--body-dark);
-	border-radius: 8.5% / 5%;
-	border: var(--dark-border);
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	align-items: center;
-	box-shadow: var(--dark-shadow);
-	position: relative;
+  width: var(--width);
+  height: var(--height);
+  background: var(--body-dark);
+  border-radius: 8.5% / 5%;
+  border: var(--dark-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  box-shadow: var(--dark-shadow);
+  position: relative;
 }
 
 .back-animation {
-	width: var(--width);
-	height: var(--height);
-	border-radius: 8.5% / 5%;
-	position: absolute;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	top: 50vh;
-	left: 50vw;
-	transform: translate(-50%,-50%);
+  width: var(--width);
+  height: var(--height);
+  border-radius: 8.5% / 5%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%,-50%);
 }
 
 @property --angle {
-	syntax:"<angle>";
-	inherits:false;
-	initial-value:0deg;
+  syntax:"<angle>";
+  inherits:false;
+  initial-value:0deg;
 }
 
 /* BACKGROUND ANIMATION */
 .back-animation::before,
 .back-animation::after {
-	--clr1: hsl(242.9,100%,12.4%);
-	--clr2: hsl(182.5,100%,66.7%);
-	content: '';
-	width: 100%;
-	height: 100%;
-	padding: 1%;
-	position: absolute;
-	border-radius: inherit;
-	background: conic-gradient(
-	from var(--angle),
-	var(--clr1),
-	var(--clr2),
-	var(--clr2),
-	transparent,
-	transparent,
-	var(--clr1));
-	z-index: -1;
-	animation: loop 5s linear infinite;
+  --clr1: hsl(242.9,100%,12.4%);
+  --clr2: hsl(182.5,100%,66.7%);
+  content: '';
+  width: 100%;
+  height: 100%;
+  padding: 1%;
+  position: absolute;
+  border-radius: inherit;
+  background: conic-gradient(
+  from var(--angle),
+  var(--clr1),
+  var(--clr2),
+  var(--clr2),
+  transparent,
+  transparent,
+  var(--clr1));
+  z-index: -1;
+  animation: loop 5s linear infinite;
 }
 
 .back-animation::after {
-	filter: blur(15px);
+  filter: blur(15px);
 }
 
 @keyframes loop {
-	to {
-		--angle: 360deg;
-	}
+  to {
+    --angle: 360deg;
+  }
 }
 
 
 [data-theme="light"] .container {
-	background: var(--body-light);
-	border: var(--light-border);
-	box-shadow: var(--light-shadow);
+  background: var(--body-light);
+  border: var(--light-border);
+  box-shadow: var(--light-shadow);
 }
 
 [data-theme="light"] :is(.back-animation::before,.back-animation::after) {
-	--clr1: hsl(200.9,97.7%,34.5%);
-	--clr2: hsl(170.4,100%,58.4%);
+  --clr1: hsl(200.9,97.7%,34.5%);
+  --clr2: hsl(170.4,100%,58.4%);
 }
 
 /* SCREEN STYLES */
 
 .screen {
-	width: 97%;
-	height: 24%;
-	padding: 0 2%;
-	background: var(--screen-dark);
-	border-radius: 10% 10% 0 0 / 20% 20% 0 0;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-	position: relative;
+  width: 97%;
+  height: 20%;
+  padding: 0 2%;
+  background: var(--screen-dark);
+  border-radius: 10% 10% 0 0 / 20% 20% 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
 }
 
 [data-theme="light"] .screen {
-	background: var(--screen-light);
+  background: var(--screen-light);
 }
 
+.screen__deg-rag {
+  width: 5%;
+  height: 5%;
+  position: absolute;
+  top: 5%;
+  left: 10%;
+  color: var(--text-dark);
+  opacity: 50%;
+  font-size: 70%;
+}
+
+[data-theme="light"] .screen__deg-rag {
+  color: var(--text-light);
+}
 
 .screen__cover {
-	width: 100%;
-	height: 100%;
-	background: var(--screen-cover-dark);
-	position: absolute;
-	transform: scale(0);
-	transform-origin: right top;
-	inset: 0;
-	z-index: 5;
-	clip-path: circle(50% at right top);
-	-webkit-clip-path: circle(50% at right top);
+  width: 100%;
+  height: 100%;
+  background: var(--screen-cover-dark);
+  position: absolute;
+  transform: scale(0);
+  transform-origin: right top;
+  inset: 0;
+  z-index: 5;
+  clip-path: circle(50% at right top);
+  -webkit-clip-path: circle(50% at right top);
 }
 
 [data-theme="light"] .screen__cover {
-	background: var(--screen-cover-light);
+  background: var(--screen-cover-light);
 }
 
 .clearer {
-	animation: cover .7s linear;
+  animation: cover .7s linear;
 }
 
 @keyframes cover {
-	0 {
-		opacity: 100%;
-	}
-	70% {
-		opacity: 70%;
-		transform: scale(5);
-	}
-	100% {
-		opacity: 0;
-		transform: scale(5);
-	}
+  0 {
+    opacity: 100%;
+  }
+  70% {
+    opacity: 70%;
+    transform: scale(5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(5);
+  }
 }
 
 .screen__main , .screen__result {
-	width: inner-text;
-	height: 50%;
-	padding: 5% 0;
-	font-size: 1.5rem;
-	color: var(--text-dark);
-	display: flow-roots;
-	white-space: nowrap;
-	text-align: right;
-	transition: 0.5s;
-	overflow: auto;
-	scrollbar-width: thin;
+  width: inner-text;
+  height: 50%;
+  background: none;
+  border: none;
+  padding: 5% 0;
+  font-size: 100%;
+  color: var(--text-dark);
+  display: flow-roots;
+  white-space: nowrap;
+  text-align: right;
+  transition: 0.5s;
+  overflow: auto;
+  scrollbar-width: thin;
 }
 
 [data-theme="light"] :is(.screen__main,.screen__result) {
-	color: var(--text-light);
+  color: var(--text-light);
 }
 
 .screen__main {
-	font-size: 2rem;
-	font-weight: bolder;
+  font-size: 133%;
+  font-weight: bolder;
 }
 
 /* BUTTONS STYLE */
 .btns {
-	width: 98%;
-	height: 73%;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	border-radius: 4%/3%;
-	overflow: hidden;
+  width: 98%;
+  height: 77%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 4%/3%;
+  overflow: hidden;
 }
 
 .btns__ctrl {
-	width: 100%;
-	flex: 1;
-	display: flex;
+  width: 100%;
+  flex: 1;
+  display: flex;
 }
 
 .ctrl {
-	width: 25%;
-	height: 100%;
-	background: var(--ctrl-dark);
-	text-align: center;
-	color: var(--ctrl-txt-dark);
-	transition: transform .2s;
+  width: 25%;
+  height: 100%;
+  background: var(--ctrl-dark);
+  text-align: center;
+  color: var(--ctrl-txt-dark);
+  transition: transform .2s;
 }
 
 [data-theme="light"] .ctrl {
-	background: var(--ctrl-light);
-	color: var(--ctrl-txt-light);
+  background: var(--ctrl-light);
+  color: var(--ctrl-txt-light);
 }
 
-.left, .right {
-	background: var(--btn-dark);
-	color: var(--text-dark);
-	border-right: 1px solid black;
-	border-left: 1px solid black;
-	border-collapse: collapse;
-	position: relative;
-	overflow: hidden;
+.left, .right,.deg-rad {
+  background: var(--btn-dark);
+  color: var(--text-dark);
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+  border-collapse: collapse;
+  position: relative;
+  overflow: hidden;
 }
 
-[data-theme="light"] :is(.left,.right) {
-	background: var(--btn-light);
-	color: var(--text-light);
+[data-theme="light"] :is(.left,.right,.comma) {
+  background: var(--btn-light);
+  color: var(--text-light);
 }
 
 
 /* NUMBERS AND OPERATORS BUTTON STYLES */
 .btns__nums {
-	width: 100%;
-	padding-top: 1%;
-	flex: 15;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	border-radius: 0 0 20px 20px;
-	overflow: hidden;
+  width: 100%;
+  padding-top: 1%;
+  flex: 15;
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
 }
 
 .btn {
-	width: 90%;
-	height: 90%;
-	place-self: center;
-	border-radius: 18%/14%;
-	display: grid;
-	place-content: center;
-	font-size: 2.2rem;
-	background: var(--btn-dark);
-	color: var(--text-dark);
-	position: relative;
-	overflow: hidden;
-	transition: transform .2s;
+  width: 90%;
+  height: 90%;
+  place-self: center;
+  border-radius: 18%/14%;
+  display: grid;
+  place-content: center;
+  font-size: 120%;
+  background: var(--btn-dark);
+  color: var(--text-dark);
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s;
 }
 
 [data-theme="light"] .btn {
-	background: var(--btn-light);
-	color: var(--text-light);
-	box-shadow: var(--light-shadow);
+  background: var(--btn-light);
+  color: var(--text-light);
+  box-shadow: var(--light-shadow);
 }
 
 .btn:active, .ctrl:active {
-	transform: scale(0.95);
-	opacity: 0.8;
+  transform: scale(0.95);
+  opacity: 0.8;
 }

@@ -1,163 +1,198 @@
 import {
-	calculator
-} from './calculationLogic.js';
+  constants,
+  btnCompiler,
+  textToWrite,
+  calculator
+} from './utils.js';
+import {
+  braceTwins
+} from './formatter.js';
 
 // elements
 const mainScreen = document.querySelector('.screen__main'); // screen that show clicked numbers
 const resultScreen = document.querySelector('.screen__result'); // screen that shows calculation result
-// single buttons
-const equal = document.querySelector('.equal');
-const dot = document.querySelector('.dot');
-const leftBracket = document.querySelector('.left');
-const rightBracket = document.querySelector('.right');
-const clear = document.querySelector('.clr');
-const back = document.querySelector('.back');
 
 // array of buttons
-const oprtrBtn = [...document.querySelectorAll('.optr')]; // array of operators element
-const oprators = oprtrBtn.map((btn)=>btn.innerText);
+const OprtrBtn = [...document.querySelectorAll('.optr')]; // array of operators element
+const operators = OprtrBtn.map((btn)=>btn.innerText);
+
+const dagRadScreen = document.querySelector('.screen__deg-rag');
 
 const numbers = [...document.querySelectorAll('.num')]; // array of number elements
-const numData = numbers.map((num)=>num.innerText);
 
-
-// Theme toggler
-document.querySelector(".theme-toggle").addEventListener('click', (e)=> {
-	const body = document.body;
-	let theme = body.getAttribute('data-theme')
-
-	if (theme === "dark") {
-		body.setAttribute('data-theme', "light");
-		e.target.innerText = 'Dark'
-	} else {
-		body.setAttribute('data-theme', "dark");
-		e.target.innerText = 'Light'
-	}
-})
+let content = mainScreen.value;
+let result = "";
+let unit = dagRadScreen.innerText;
 
 // Writer on screen
 document.querySelector('.btns__nums').addEventListener('click', (e)=> {
-	const target = e.target;
+  const target = e.target;
 
-	if (!target.matches('.btn')) return;
-	if (mainScreen.innerText === "Error")
-		mainScreen.innerText = "";
-	let screenText = mainScreen.innerText;
-	let lastIndex = screenText.length - 1;
+  if (!target.matches('.btn'))
+    return;
+  let lastChar = content.slice(-1);
 
-	if (numbers.includes(target)) {
-		if (screenText === '0') {
-			// if '0' on the screen replace with clucked number
-			mainScreen.innerText = target.innerText;
-			return;
-		}
-		mainScreen.innerText += target.innerText;
-		try {
-			let result = calculator(mainScreen.innerText);
-			resultScreen.innerText = result !== undefined?result: "";
-		}catch(err) {
-			mainScreen.innerText = "";
-			resultScreen.innerText = "Error";
-		}
+  if (numbers.includes(target)) {
+    let value = constants(target.innerText);
+    if ((!isNaN(lastChar) && lastChar !== '' && ['π', 'e'].includes(target.innerText)) || lastChar === '!')
+      value = "×" + constants(target.innerText);
+    else if (lastChar === '.' && ['π', 'e'].includes(target.innerText))
+      value = '0' + '×' + constants(target.innerText);
 
-	} else if (oprtrBtn.includes(target)) {
+    content += value;
+    result = calculator(content, unit, [resultScreen]);
 
-		// prevent writing operators on clear screen
-		if (screenText.length === 0) {
-			if (target.innerText !== '-') return;
-			mainScreen.innerText = target.innerText;
-			return
-		}
+  } else if (OprtrBtn.includes(target)) {
+    let oprtr = btnCompiler(target.innerText);
+    content = textToWrite(oprtr, lastChar, content);
+    if (target.innerText === '!')
+      result = calculator(content, unit, [resultScreen]);
+    resultScreen.value = result;
+  }
 
-		if (oprators.includes(screenText[lastIndex]) || screenText[lastIndex] ===
-			dot.innerText) {
-			// prevent typing preceded operators and point
-			if (screenText.length > 1) {
-				// allow negative sign after multiplication and division
-				if (target.innerText === '-' && ['×', '÷'].includes(screenText[lastIndex]))
-					mainScreen.innerText += target.innerText;
-
-				else {
-					if (oprators.includes(screenText[lastIndex-1]))
-						screenText = screenText.slice(0, lastIndex-1) + target.innerText;
-					else
-						screenText = screenText.slice(0, lastIndex) + target.innerText;
-					mainScreen.innerText = screenText;
-				}
-			}
-		} else if (screenText[lastIndex] === '(') {
-			if (target.innerText !== '-' && screenText.length > 1) {
-				mainScreen.innerText = screenText.slice(0, lastIndex) + target.innerText;
-			} else if (target.innerText == '-')
-				mainScreen.innerText += target.innerText;
-		} else
-			mainScreen.innerText += target.innerText;
-	} else {
-		if (target === dot) {
-			if (numData.includes(screenText[lastIndex])) {
-				const parts = screenText.split(/[\-\+\÷\×]/);
-				const lastNum = parts[parts.length-1];
-				if (!lastNum.includes('.'))
-					mainScreen.innerText += target.innerText;
-			} else if (screenText.length === 0)
-				// for empty screen add 0 before point
-			mainScreen.innerText = `0${dot.innerText}0`;
-		} else if (target === equal) {
-			let value;
-			try {
-				value = calculator(screenText);
-			}
-			catch (err) {
-				value = "Error";
-			}
-			mainScreen.innerText = value === undefined?"": value;
-			resultScreen.innerText = '';
-		}
-	}
-	// prevent the text from sticking on the left corner
-	mainScreen.scrollLeft = mainScreen.scrollWidth;
+  mainScreen.value = content;
+  if (result === "Error") {
+    mainScreen.value = result;
+    content = "";
+    result = "";
+  }
+  if (mainScreen.value.length === 0)
+    resultScreen.value = "";
+  // prevent the text from sticking on the left corner
+  mainScreen.scrollLeft = mainScreen.scrollWidth;
 })
 
+
+// handling dot
+document.querySelector('.dot').addEventListener("click", (e)=> {
+  const dot = e.targer;
+  if ([...operators, '(', ')'].includes(content.slice(-1)))
+    return;
+
+  let parts = content.split(/[\+\-\÷\×\√\^]/);
+  if (content.length === 0)
+    content = '0.';
+  else if (!parts[parts.length-1].includes('.'))
+    content += '.';
+  mainScreen.value = content;
+})
+
+
+// equal sign handler
+document.querySelector('.equal').addEventListener('click', (e)=> {
+  const target = e.target;
+  content = calculator(content, unit).toString();
+  if (content === "Error")
+    content = "";
+  mainScreen.value = content;
+  resultScreen.value = content;
+})
+
+
 // handling clear button and back button
-document.querySelector('.btns__ctrl').addEventListener("click",
-	(e)=> {
-		const target = e.target;
-		let screenText = mainScreen.innerText;
-		let lastIndex = screenText.length - 1;
-		if (target === clear) {
-			let cover = document.querySelector('.screen__cover');
-			cover.classList.add('clearer');
-			setTimeout(()=> cover.classList.remove('clearer'), 700)
-			setTimeout(()=> {
-				mainScreen.innerText = "";
-				resultScreen.innerText = "";
-			}, 100)
-		} else if (target === back) {
-			if (screenText !== "") {
-				mainScreen.innerText = screenText.length == 1?
-				"": screenText.slice(0, lastIndex);
-				let result = calculator(mainScreen.innerText);
-				resultScreen.innerText = result !== undefined? result: "";
-			}
-		} else {
-			// writing on screen brackets
-			if (target.innerText === ')') {
-				if (oprators.includes(screenText[lastIndex])) {
-					if (screenText.length !== 1)
-						mainScreen.innerText = screenText.slice(0, lastIndex) + target.innerText;
-				} else if (screenText[lastIndex] === '(')
-					mainScreen.innerText = screenText.slice(0, lastIndex);
-				else if (screenText === "Error")
-					mainScreen.innerText = "";
-				else if (screenText[lastIndex] === '.')
-					mainScreen.innerText += `0${target.innerText}`;
-				else if (screenText.length !== 0)
-					mainScreen.innerText += target.innerText;
-				return;
-			}
-			if (screenText[lastIndex] === ".")
-				mainScreen.innerText += `0${target.innerText}`;
-			else
-				mainScreen.innerText += target.innerText;
-		}
-	})
+document.querySelector('.right').addEventListener("click",
+  (e)=> {
+    const target = e.target;
+    let lastIndex = content.length - 1;
+
+    // writing on screen brackets
+    if (operators.includes(content[lastIndex]) || content[lastIndex] === '(')
+      return;
+    else if (content[lastIndex] === '.')
+      content += `0${target.innerText}`;
+    else if (content.length !== 0)
+      content += target.innerText;
+    mainScreen.value = content;
+  })
+
+
+document.querySelector('.left').addEventListener("click",
+  (e)=> {
+    const target = e.target;
+    let lastIndex = content.length - 1;
+
+    if (content[lastIndex] === ".")
+      content += `0${target.innerText}`;
+    else
+      content += target.innerText;
+
+    mainScreen.value = content;
+  })
+
+
+document.querySelector('.comma').addEventListener("click", (e)=> {
+  const target = e.target;
+  if (!content.includes('log'))
+    return;
+  let log = content.lastIndexOf('log');
+  let twinBrace = braceTwins(content, log+3);
+  if (content.length-1 > log+3 && twinBrace === undefined) {
+    if (content.slice(log+3).includes(','))
+    return;
+    content += ',';
+    mainScreen.value = content;
+  }
+})
+
+
+// clear function
+document.querySelector('.clr').addEventListener("click", ()=> {
+  const cover = document.querySelector('.screen__cover');
+  cover.classList.add('clearer');
+  setTimeout(()=> cover.classList.remove('clearer'),
+    700)
+  setTimeout(()=> {
+    content = "";
+    mainScreen.value = content;
+    resultScreen.value = content;
+  },
+    100)
+})
+
+// back function
+document.querySelector('.back').addEventListener("click", ()=> {
+  if (content !== "") {
+    let part = /[gctns]/.test(content.slice(-2, -1));
+    if (!part)
+      content = content.slice(0, -1);
+    else {
+      if (content.slice(-3, -2) === 'l')
+        content = content.slice(0, -3);
+      else
+        content = content.slice(0, -4);
+    }
+    mainScreen.value = content;
+    if (calculator(content, unit) !== "Error")
+      resultScreen.value = calculator(content, unit);
+    if (content === "")
+      resultScreen.value = content;
+  }
+})
+
+// Theme toggler
+document.querySelector(".theme-toggle").addEventListener('click', (e)=> {
+  const body = document.body;
+  let theme = body.getAttribute('data-theme')
+
+  if (theme === "dark") {
+    body.setAttribute('data-theme', "light");
+    e.target.innerText = 'Dark'
+  } else {
+    body.setAttribute('data-theme', "dark");
+    e.target.innerText = 'Light'
+  }
+})
+
+document.querySelector(".deg-rad").addEventListener("click", (e)=> {
+  const target = e.target;
+  let data = dagRadScreen.innerText;
+  if (data === 'DEG') {
+    dagRadScreen.innerText = 'RAD';
+    e.target.innerText = 'DEG';
+    unit = "RAD";
+  } else {
+    dagRadScreen.innerText = 'DEG';
+    e.target.innerText = 'RAD';
+    unit = "DEG";
+  }
+})

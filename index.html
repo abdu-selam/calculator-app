@@ -1,101 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-	<meta name="author" content="Abduselam Awel">
-	<meta name="description" content="Simple calculator app">
+  <meta name="author" content="Abduselam Awel">
+  <meta name="description" content="Simple calculator app">
 
-	<link rel="shortcut icon" type="image/x-icon" href="/favicon.png">
-	<link rel="stylesheet" href="./style/main.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png">
+  <link rel="stylesheet" href="./style/main.css">
 
-	<title>Calculator</title>
+  <title>Calculator</title>
 
-	<script type="module" src="./script/main.js"></script>
+  <script type="module" src="./script/main.js"></script>
 </head>
 <body data-theme="dark">
 
-	<button class="theme-toggle"> Light </button>
-	<div class="back-animation"></div>
+  <button class="theme-toggle"> Light </button>
+  <div class="back-animation"></div>
 
-	<div class="container">
+  <div class="container">
 
-		<div class="screen">
-			<!-- number writing screen -->
-			<div class="screen__main"></div>
-			<!-- number result shower screen -->
-			<div class="screen__result"></div>
-			<div class="screen__cover"></div>
-		</div>
-		<div class="btns">
-			<div class="btns__ctrl">
-				<button class="ctrl clr">
-					clear
-				</button>
-				<button class="ctrl left">
-					(
-				</button>
-				<button class="ctrl right">
-					)
-				</button>
-				<button class="ctrl back">
-					del
-				</button>
-			</div>
-			<!-- number and operator buttons -->
-			<div class="btns__nums">
-				<button class="btn num" type="button" aria-label="Number 1">
-					1
-				</button>
-				<button class="btn num" type="button" aria-label="Number 2">
-					2
-				</button>
-				<button class="btn num" type="button" aria-label="Number 3">
-					3
-				</button>
-				<button class="btn optr" type="button" aria-label="plus sign">
-					+
-				</button>
-				<button class="btn num" type="button" aria-label="Number 4">
-					4
-				</button>
-				<button class="btn num" type="button" aria-label="Number 5">
-					5
-				</button>
-				<button class="btn num" type="button" aria-label="Number 6">
-					6
-				</button>
-				<button class="btn optr" type="button" aria-label="minus sign">
-					-
-				</button>
-				<button class="btn num" type="button" aria-label="Number 7">
-					7
-				</button>
-				<button class="btn num" type="button" aria-label="Number 8">
-					8
-				</button>
-				<button class="btn num" type="button" aria-label="Number 9">
-					9
-				</button>
-				<button class="btn optr" type="button" aria-label="multiplication sign">
-					×
-				</button>
-				<button class="btn dot" type="button" aria-label="point">
-					.
-				</button>
-				<button class="btn num" type="button" aria-label="Number 0">
-					0
-				</button>
-				<button class="btn equal" type="button" aria-label="equal sign">
-					=
-				</button>
-				<button class="btn optr" type="button" aria-label="division sign">
-					÷
-				</button>
-			</div>
-		</div>
-	</div>
+    <div class="screen">
+      <!-- number writing screen -->
+      <input type="text" value="" class="screen__main" readonly>
+      <!-- number result shower screen -->
+      <input type="text" value="" class="screen__result" readonly>
+      <div class="screen__deg-rag">
+        DEG
+      </div>
+      <div class="screen__cover"></div>
+    </div>
+    <div class="btns">
+      <div class="btns__ctrl">
+        <button class="ctrl clr">
+          clear
+        </button>
+        <button class="ctrl deg-rad">
+          RAD
+        </button>
+        <button class="ctrl left">
+          (
+        </button>
+        <button class="ctrl right">
+          )
+        </button>
+        <button class="ctrl back">
+          del
+        </button>
+      </div>
+      <!-- number and operator buttons -->
+      <div class="btns__nums">
+        <button class="btn comma">
+          ,
+        </button>
+        <button class="btn optr" type="button" aria-label="cosine operator">
+          !
+        </button>
+        <button class="btn num" type="button" aria-label="constant number e">
+          e
+        </button>
+        <button class="btn num" type="button" aria-label="PI">
+          π
+        </button>
+        <button class="btn optr" type="button" aria-label="cosecant operator">
+          csc
+        </button>
+        <button class="btn optr" type="button" aria-label="Power">
+          ^
+        </button>
+        <button class="btn optr" type="button" aria-label="logarithm">
+          log
+        </button>
+        <button class="btn optr" type="button" aria-label="natural logarithm">
+          ln
+        </button>
+        <button class="btn optr" type="button" aria-label="Square root">
+          √
+        </button>
+        <button class="btn optr" type="button" aria-label="secant operator">
+          sec
+        </button>
+        <button class="btn num" type="button" aria-label="Number 1">
+          1
+        </button>
+        <button class="btn num" type="button" aria-label="Number 2">
+          2
+        </button>
+        <button class="btn num" type="button" aria-label="Number 3">
+          3
+        </button>
+        <button class="btn optr" type="button" aria-label="plus sign">
+          +
+        </button>
+        <button class="btn optr" type="button" aria-label="cotangent operator">
+          cot
+        </button>
+        <button class="btn num" type="button" aria-label="Number 4">
+          4
+        </button>
+        <button class="btn num" type="button" aria-label="Number 5">
+          5
+        </button>
+        <button class="btn num" type="button" aria-label="Number 6">
+          6
+        </button>
+        <button class="btn optr" type="button" aria-label="minus sign">
+          -
+        </button>
+        <button class="btn optr" type="button" aria-label="sine operator">
+          sin
+        </button>
+        <button class="btn num" type="button" aria-label="Number 7">
+          7
+        </button>
+        <button class="btn num" type="button" aria-label="Number 8">
+          8
+        </button>
+        <button class="btn num" type="button" aria-label="Number 9">
+          9
+        </button>
+        <button class="btn optr" type="button" aria-label="multiplication sign">
+          ×
+        </button>
+        <button class="btn optr" type="button" aria-label="cosine operator">
+          cos
+        </button>
+        <button class="btn dot" type="button" aria-label="point">
+          .
+        </button>
+        <button class="btn num" type="button" aria-label="Number 0">
+          0
+        </button>
+        <button class="btn equal" type="button" aria-label="equal sign">
+          =
+        </button>
+        <button class="btn optr" type="button" aria-label="division sign">
+          ÷
+        </button>
+        <button class="btn optr" type="button" aria-label="tangent operator">
+          tan
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
