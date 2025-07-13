@@ -1,0 +1,5 @@
+# 1. SPA Fallback (all paths → index.html)
+/*    /index.html    200
+
+# 2. Force HTTPS (optional - Netlify does this by default)
+http://abdus-calculator.netlify.app/*    https://abdus-calculator.netlify.app/:splat    301!
