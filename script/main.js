@@ -128,7 +128,7 @@ document.querySelector('.comma').addEventListener("click", (e)=> {
   let twinBrace = braceTwins(content, log+3);
   if (content.length-1 > log+3 && twinBrace === undefined) {
     if (content.slice(log+3).includes(','))
-    return;
+      return;
     content += ',';
     mainScreen.value = content;
   }
@@ -195,4 +195,6 @@ document.querySelector(".deg-rad").addEventListener("click", (e)=> {
     e.target.innerText = 'RAD';
     unit = "DEG";
   }
+  if (calculator(content, unit) !== "Error")
+    result = calculator(content, unit, [resultScreen]);
 })
