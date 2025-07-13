@@ -3,3 +3,8 @@
 
 # 2. Force HTTPS (optional - Netlify does this by default)
 http://abdus-calculator.netlify.app/*    https://abdus-calculator.netlify.app/:splat    301!
+# Redirect www to non-www
+https://www.abdus-calculator.netlify.app/*  https://abdus-calculator.netlify.app/:splat  301!
+
+# Redirect www to non-www
+http://www.abdus-calculator.netlify.app/*  https://abdus-calculator.netlify.app/:splat  301!
